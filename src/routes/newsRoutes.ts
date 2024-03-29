@@ -1,18 +1,16 @@
-const express = require("express");
+import * as express from "express";
 
-const {
+import {
+  deleteNews,
   getNews,
-  postNews,
   getNewsById,
   patchNews,
-  deleteNews,
-} = require("../controllers/news-controller");
+  postNews,
+} from "@src/controllers/news-controller";
 
-const { getCommentsForNews } = require("../controllers/comments-controller");
+import { getCommentsForNews } from "@src/controllers/comments-controller";
 
-const router = express.Router();
-
-module.exports = router;
+const router: express.Router = express.Router();
 
 //Post Method
 router.post("/", postNews);
@@ -31,3 +29,5 @@ router.patch("/:id", patchNews);
 
 //Delete by ID Method
 router.delete("/:id", deleteNews);
+
+export default  router ;

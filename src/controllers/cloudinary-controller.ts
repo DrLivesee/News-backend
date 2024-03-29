@@ -1,7 +1,9 @@
 
-const cloudinary = require("../utils/cloudinary");
+import cloudinary from "@src/utils/cloudinary";
 
- async function postImage (req, res) {
+import { Request, Response } from 'express';
+
+ async function postImage (req: Request, res: Response): Promise<void> {
   if (!req.file) return
   await cloudinary.uploader.upload(req.file.path, {folder: 'users'}, function (err, result){
     if(err) {
@@ -20,6 +22,4 @@ const cloudinary = require("../utils/cloudinary");
   })
 }
 
-module.exports = {
-    postImage
-};
+export { postImage }

@@ -1,24 +1,20 @@
-const express = require("express");
+import * as express from "express";
 
-const {
-    getComments,
-    postComment,
-    getCommentById,
-    patchComment,
-    deleteComment
-    
-} = require("../controllers/comments-controller");
+import {
+  getComments,
+  postComment,
+  getCommentById,
+  patchComment,
+  deleteComment,
+} from "@src/controllers/comments-controller";
 
-const router = express.Router();
-
-module.exports = router;
+const router: express.Router = express.Router();
 
 //Post Method
 router.post("/", postComment);
 
 //Get all Method
 router.get("/", getComments);
-
 
 //Get by ID Method
 router.get("/:id", getCommentById);
@@ -28,3 +24,5 @@ router.patch("/:id", patchComment);
 
 //Delete by ID Method
 router.delete("/:id", deleteComment);
+
+export default router
