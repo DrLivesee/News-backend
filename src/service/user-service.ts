@@ -56,7 +56,7 @@ async function registration(user: IUserRegistration) {
 
   const userDto: UserDto = new UserDto(currentUser);
   const tokens: ITokens = generateTokens({ ...userDto });
-  await saveToken(userDto.id, tokens.refreshToken);
+  await saveToken(userDto._id, tokens.refreshToken);
 
   return { ...tokens, user: userDto };
 }
@@ -108,7 +108,7 @@ async function login(user: IUserSignIn) {
   const userDto: UserDto = new UserDto(currentUser);
   const tokens: ITokens = generateTokens({ ...userDto });
 
-  await saveToken(userDto.id, tokens.refreshToken);
+  await saveToken(userDto._id, tokens.refreshToken);
   return { ...tokens, user: userDto };
 }
 
@@ -126,11 +126,11 @@ async function refresh(refreshToken: string) {
   if (!userData || !tokenFromDb) {
     throw UnauthorizedError();
   }
-  const user: IUser = await UserModel.findById(userData.id);
+  const user: IUser = await UserModel.findById(userData._id);
   const userDto: UserDto = new UserDto(user);
   const tokens: ITokens = generateTokens({ ...userDto });
 
-  await saveToken(userDto.id, tokens.refreshToken);
+  await saveToken(userDto._id, tokens.refreshToken);
   return { ...tokens, user: userDto };
 }
 

@@ -1,12 +1,13 @@
 import { model, Document, Schema } from "mongoose";
 
 export interface IComment extends Document {
+  _id: string;
   createdAt?: Date;
   name: string;
   avatar: string;
   text: string;
   userId: Schema.Types.ObjectId | string;
-  newsId: Schema.Types.ObjectId;
+  newsId: Schema.Types.ObjectId | string;
 }
 
 export interface ICommentGetResponse  {

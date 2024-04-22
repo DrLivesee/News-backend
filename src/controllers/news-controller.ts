@@ -28,7 +28,7 @@ async function getNews(req: Request, res: Response): Promise<void> {
       news = news.sort(
         (a, b) =>
           new Date(b.published).getTime() - new Date(a.published).getTime()
-      ); // Сортировка по убыванию даты
+      ); 
     }
     res.json({ news, totalDocuments } as INewsGetResponse);
   } catch (error) {

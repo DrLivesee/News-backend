@@ -1,6 +1,7 @@
 import { model, Document, Schema } from "mongoose";
 
 export interface INews extends Document {
+  id: string;
   author: string;
   published: Date;
   image: string;
@@ -41,15 +42,4 @@ const newsSchema = new Schema<INews>({
     type: String,
   },
 });
-
-// newsSchema.pre<INews>('save', function(next) {
-//     const requiredFields: Array<keyof INews> = ['author', 'published', 'image', 'title', 'description', 'content'];
-//     for (const field of requiredFields) {
-//         if (!this[field]) {
-//             return next(new Error(`${field} is required`));
-//         }
-//     }
-//     next();
-// });
-
 export default model<INews>('News', newsSchema);

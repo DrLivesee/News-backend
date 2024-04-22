@@ -1,11 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import Comment, {IComment, ICommentGetResponse} from "@src/models/commentModel";
+import Comment, {
+  IComment,
+  ICommentGetResponse,
+} from "@src/models/commentModel";
 
 async function getComments(req: Request, res: Response): Promise<void> {
   try {
     let comments: IComment[] = await Comment.find();
-    
 
     let totalDocuments: number = await Comment.countDocuments();
 
@@ -16,24 +18,28 @@ async function getComments(req: Request, res: Response): Promise<void> {
 }
 
 async function getCommentsForNews(req: Request, res: Response): Promise<void> {
-    const newsId: string = req.params.newsId as string;
-  
-    try {
-      let comments: IComment[] = await Comment.find({ newsId });
+  const newsId: string = req.params.newsId as string;
 
-      if (req.query.sort === "createdAt") {
-        comments = comments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      }
-      res.json(comments as IComment[]);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    let comments: IComment[] = await Comment.find({ newsId });
+    const totalDocuments: number = comments.length;
+
+    if (req.query.sort === "createdAt") {
+      comments = comments.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     }
+    res.json({ comments, totalDocuments } as ICommentGetResponse);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
+}
 
 async function postComment(req: Request, res: Response): Promise<void> {
-  const comment: IComment = req.body
+  const comment: IComment = req.body;
   const data: IComment = new Comment({
-    ...comment
+    ...comment,
   });
 
   try {
@@ -59,7 +65,11 @@ async function patchComment(req: Request, res: Response): Promise<void> {
     const updatedData: Partial<IComment> = req.body;
     const options: { new: boolean } = { new: true };
 
-    const result: IComment | null = await Comment.findByIdAndUpdate(id, updatedData, options);
+    const result: IComment | null = await Comment.findByIdAndUpdate(
+      id,
+      updatedData,
+      options
+    );
 
     res.send(result as IComment);
   } catch (error) {
@@ -83,5 +93,5 @@ export {
   getCommentById,
   patchComment,
   deleteComment,
-  getCommentsForNews
+  getCommentsForNews,
 };

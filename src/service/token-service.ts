@@ -4,7 +4,7 @@ import { DeleteResult } from 'mongodb';
 
 interface ITokenPayload {
   email: string;
-  id: string;
+  _id: string;
 }
 
 export interface ITokens {
