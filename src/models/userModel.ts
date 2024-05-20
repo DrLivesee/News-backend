@@ -7,9 +7,14 @@ export interface IUser extends Document {
   password: string;
   firstName: string;
   lastName: string;
-  avatar: string;
+  avatar: IAvatar;
   registrationDate: Date;
   role: string;
+}
+
+export interface IAvatar {
+  avatarUrl: string;
+  public_id: string;
 }
 
 export interface IUserRegistration {
@@ -17,7 +22,7 @@ export interface IUserRegistration {
   password: string;
   firstName: string;
   lastName: string;
-  avatar?: string;
+  avatar?: IAvatar;
   isAdmin?: boolean;
 }
 
@@ -29,8 +34,8 @@ export interface IUserSignIn {
 export interface IUserValidate {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface IUserWithTokens {
@@ -67,8 +72,8 @@ const userSchema = new Schema<IUser>({
     required: true,
   },
   avatar: {
-    type: String,
-    default: '',
+    type: {avatarUrl: String, public_id: String},
+    default: {},
   },
   registrationDate: {
     type: Date,

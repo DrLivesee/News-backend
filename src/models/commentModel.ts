@@ -15,6 +15,11 @@ export interface ICommentGetResponse  {
   totalDocuments: number
 }
 
+export interface ICommentsForUserGetResponse  {
+  ids: string[],
+  totalDocuments: number
+}
+
 function isValidUserId(value: any): boolean {
   return typeof value === 'string' || value instanceof Schema.Types.ObjectId;
 }
