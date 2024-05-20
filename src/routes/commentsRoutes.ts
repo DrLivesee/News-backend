@@ -5,7 +5,8 @@ import {
   postComment,
   getCommentById,
   patchComment,
-  deleteComment,
+  patchComments,
+  deleteComment
 } from "@src/controllers/comments-controller";
 
 const router: express.Router = express.Router();
@@ -21,6 +22,8 @@ router.get("/:id", getCommentById);
 
 //Update by ID Method
 router.patch("/:id", patchComment);
+
+router.patch("/bulk-update", patchComments);
 
 //Delete by ID Method
 router.delete("/:id", deleteComment);
