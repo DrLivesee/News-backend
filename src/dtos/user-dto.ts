@@ -1,11 +1,11 @@
-import { IUser } from "@src/models/userModel";
+import { IAvatar, IUser } from "@src/models/userModel";
 
 export default class UserDto {
   _id: string;
   email: string;
   firstName: string;
   lastName: string;
-  avatar: string;
+  avatar: IAvatar;
   role: string;
   registrationDate: Date
   
