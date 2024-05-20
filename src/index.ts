@@ -46,7 +46,7 @@ app.use(
 app.use("/news", newsRoutes);
 app.use("/comments", commentsRoutes);
 app.use("/auth", authRoutes);
-app.use('/upload-image', cloudinaryRoutes);
+app.use('/image', cloudinaryRoutes);
 
 app.use(errorMiddleware);
 
