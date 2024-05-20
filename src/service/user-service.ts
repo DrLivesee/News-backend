@@ -2,7 +2,7 @@ import UserModel, {
   IUser,
   IUserRegistration,
   IUserValidate,
-  IUserSignIn
+  IUserSignIn,
 } from "@src/models/userModel";
 import { JwtPayload } from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
@@ -26,7 +26,7 @@ async function registration(user: IUserRegistration) {
     password,
     firstName,
     lastName,
-    avatar = "",
+    avatar = {},
     isAdmin = false,
   } = user;
 
@@ -94,6 +94,41 @@ async function validateRegistration(user: IUserValidate) {
   return { isValid, errors };
 }
 
+async function validateSignIn(user: IUserValidate) {
+  const { email, password } = user;
+
+  const errors: { [key: string]: string } = {};
+  const candidate: IUser = await UserModel.findOne({ email });
+  if (!candidate) {
+    errors.email = `Пользователь с почтовым адресом ${email} не существует`;
+  }
+
+  const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    errors.formatEmail = "Неверный формат email";
+  }
+
+  if (password.split("").length < 6 || password.split("").length > 32) {
+    errors.formatPassword =
+      "Пароль должен содержать не менее 6 и не более 32 символов";
+  }
+
+  if (candidate) {
+    const isPassEquals: boolean = password
+      ? await bcrypt.compare(password, candidate.password)
+      : true;
+
+    if (!isPassEquals) {
+      errors.correctPassword = "Неверный пароль";
+    }
+  }
+
+  const isValid: boolean = Object.keys(errors).length === 0;
+
+  return { isValid, errors };
+}
+
 async function login(user: IUserSignIn) {
   const { email, password } = user;
 
@@ -101,7 +136,10 @@ async function login(user: IUserSignIn) {
   if (!currentUser) {
     throw BadRequestError("Пользователь с таким email не найден");
   }
-  const isPassEquals: boolean = await bcrypt.compare(password, currentUser.password);
+  const isPassEquals: boolean = await bcrypt.compare(
+    password,
+    currentUser.password
+  );
   if (!isPassEquals) {
     throw BadRequestError("Неверный пароль");
   }
@@ -115,6 +153,10 @@ async function login(user: IUserSignIn) {
 async function logout(refreshToken: string) {
   const token: DeleteResult = await removeToken(refreshToken);
   return token;
+}
+
+async function deleteUser(id: string) {
+  await UserModel.findByIdAndDelete(id);
 }
 
 async function refresh(refreshToken: string) {
@@ -142,8 +184,10 @@ async function getAllUsers() {
 export {
   registration,
   validateRegistration,
+  validateSignIn,
   login,
   logout,
+  deleteUser,
   refresh,
   getAllUsers,
 };
